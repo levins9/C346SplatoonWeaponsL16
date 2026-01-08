@@ -43,3 +43,48 @@ app.post('/addweapon', async (req, res) => {
         res.status(500).json({ message: 'Server error - could not add '+ weapon_name });
     }
 })
+
+app.put('/weapons/:id', async (req, res) => {
+    const { id } = req.params;
+    const { weapon_name, weapon_pic } = req.body;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [result] = await connection.execute(
+            'UPDATE defaultdb.weapons SET weapon_name = ?, weapon_pic = ? WHERE id = ?',
+            [weapon_name, weapon_pic, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Weapon not found' });
+        }
+
+        res.json({ message: `Weapon ${id} updated successfully` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error - could not update weapon' });
+    }
+});
+
+app.delete('/weapons/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [result] = await connection.execute(
+            'DELETE FROM defaultdb.weapons WHERE id = ?',
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Weapon not found' });
+        }
+
+        res.json({ message: weapon_name + 'deleted successfully'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error - could not delete weapon' });
+    }
+});
