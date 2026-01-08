@@ -35,9 +35,9 @@ app.get('/allweapons', async (req, res) => {
 app.post('/addweapon', async (req, res) => {
     const {weapon_name, weapon_pic} =req.body;
     try {
-        let connection = await mysql.createConnection({dbConfig});
-        await connection.execute('INSERT INTO cards (weapon_name, weapon_pic) VALUES (?,?)',[weapon_name, weapon_pic]);
-        res.status (201).json({message: 'Card' + card_name + 'successfully added'});
+        let connection = await mysql.createConnection(dbConfig);
+        await connection.execute('INSERT INTO defaultdb.weapons  (weapon_name, weapon_pic) VALUES (?,?)',[weapon_name, weapon_pic]);
+        res.status (201).json({message:  + weapon_name + 'successfully added'});
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error - could not add '+ weapon_name });
