@@ -48,19 +48,14 @@
         const { weapon_id } = req.params;
         const { weapon_name, weapon_pic } = req.body;
 
-        try {
-            const connection = await mysql.createConnection(dbConfig);
 
-            const [result] = await connection.execute(
+        try {
+            let connection = await mysql.createConnection(dbConfig);
+            await connection.execute(
                 'UPDATE defaultdb.weapons SET weapon_name = ?, weapon_pic = ? WHERE weapon_id = ?',
                 [weapon_name, weapon_pic, weapon_id]
             );
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: 'Weapon not found' });
-            }
-
-            res.json({ message: `Weapon ${weapon_id} updated successfully` });
+            res.json({ message: 'Weapon successfully updated' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'Server error - could not update weapon' });
@@ -71,27 +66,12 @@
         const { weapon_id } = req.params;
 
         try {
-            const connection = await mysql.createConnection(dbConfig);
-
-            // Optional: get the weapon first to show the name in the response
-            const [rows] = await connection.execute(
-                'SELECT weapon_name FROM defaultdb.weapons WHERE weapon_id = ?',
-                [weapon_id]
-            );
-
-            if (rows.length === 0) {
-                return res.status(404).json({ message: 'Weapon not found' });
-            }
-
-            const weapon_name = rows[0].weapon_name;
-
-            const [result] = await connection.execute(
+            let connection = await mysql.createConnection(dbConfig);
+            await connection.execute(
                 'DELETE FROM defaultdb.weapons WHERE weapon_id = ?',
                 [weapon_id]
             );
-
-            res.json({ message: weapon_name + ' deleted successfully' });
-
+            res.json({ message: 'Weapon successfully deleted' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'Server error - could not delete weapon' });
