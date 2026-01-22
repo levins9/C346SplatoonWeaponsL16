@@ -45,7 +45,7 @@ app.post('/addweapon', async (req, res) => {
 })
 
 app.put('/weapons/:id', async (req, res) => {
-    const { weapon_id } = req.params;
+    const { id } = req.params;
     const { weapon_name, weapon_pic } = req.body;
 
 
@@ -53,7 +53,7 @@ app.put('/weapons/:id', async (req, res) => {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
             'UPDATE defaultdb.weapons SET weapon_name = ?, weapon_pic = ? WHERE id = ?',
-            [weapon_name, weapon_pic, weapon_id]
+            [weapon_name, weapon_pic, id]
         );
         res.json({ message: 'Weapon successfully updated' });
     } catch (err) {
@@ -63,13 +63,13 @@ app.put('/weapons/:id', async (req, res) => {
 });
 
 app.delete('/weapons/:id', async (req, res) => {
-    const { weapon_id } = req.params;
+    const { id } = req.params;
 
     try {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
             'DELETE FROM defaultdb.weapons WHERE id = ?',
-            [weapon_id]
+            [id]
         );
         res.json({ message: 'Weapon successfully deleted' });
     } catch (err) {
