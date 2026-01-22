@@ -44,7 +44,7 @@ app.post('/addweapon', async (req, res) => {
     }
 })
 
-app.put('/weapons/:weapon_id', async (req, res) => {
+app.put('/weapons/:id', async (req, res) => {
     const { weapon_id } = req.params;
     const { weapon_name, weapon_pic } = req.body;
 
@@ -62,7 +62,7 @@ app.put('/weapons/:weapon_id', async (req, res) => {
     }
 });
 
-app.delete('/weapons/:weapon_id', async (req, res) => {
+app.delete('/weapons/:id', async (req, res) => {
     const { weapon_id } = req.params;
 
     try {
